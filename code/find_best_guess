@@ -1,0 +1,38 @@
+import math
+
+#VARIABLE DECLARATIONS
+max_info = 0
+cs_list = []            #length = 343 ex: SXXGS
+guess_list = ["porch", "heist", "zesty", "aabbe", "cleep"]         #len 13,000
+answer_list = ["porch", "heist", "zesty"]        #originally len 2315
+info_dict = {}
+count = 0
+
+def pop_schemes(master):
+    default = ["GRAY", "GRAY", "GRAY", "GRAY", "GRAY"]
+    master = [default]
+    for x in range(5):
+        
+
+
+
+    
+
+#FIND NEXT GUESS
+for g in guess_list:                # go through all possible guesses
+    info_sum = 0                    
+    for c in cs_list:               # every color scheme
+        count = 0
+        for a in answer_list:       # every possible answer
+            #if answer g fits into color scheme c given correct answer a
+            #if we make guess G, and the word is A, 
+                count += 1          # a
+        prob_c = count/len(answer_list)
+        info = prob_c * log((1/prob_c), 2)
+        info_sum += info
+    expected_info = info_sum/343                #is div by 343 right?
+    info_dict[g] = expected_info
+    if expected_info > max_info:
+        max_info = expected_info
+        
+guess = info_dict.index(max_info)
