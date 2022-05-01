@@ -17,7 +17,7 @@ for g in guess_list:
             #if answer g fits into color scheme c given correct answer a
                 count += 1
         prob_c = count/len(answer_list)
-        info = prob_c * log((1/prob_c), 2)
+        info = prob_c * math.log((1/prob_c), 2)
         info_sum += info
     expected_info = info_sum/343                #is div by 343 right?
     info_dict[g] = expected_info

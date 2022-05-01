@@ -68,7 +68,7 @@ def filter_dictionary(starting_dictionary, guess_colors, grays, yellows):
         if no_grays[word] not in not_final and no_grays[word] not in final_filter:
             final_filter.append(no_grays[word])
 
-    return final_filter #returns list of possible answers 
+    return final_filter, starting_dictionary #returns list of possible answers 
 
 #Main Driving Code
 
