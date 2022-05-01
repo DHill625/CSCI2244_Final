@@ -1,2 +1,2 @@
-# CSCI2244_Final
+# CSCI2244 Final
 wordle solver
