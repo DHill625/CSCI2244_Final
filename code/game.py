@@ -1,4 +1,5 @@
 #DAVID
+from curses.ascii import GS
 import numpy as np
 import math
 import random
@@ -25,16 +26,19 @@ def getEV(guess, ans_list):
     ev = 0
     fr_tracker = {}
     for answer in ans_list:
-        ret = ['b']*5
+        ret = ['GRAY']*5
+        ans = ['GRAY']*5
         for i in range(5):
             if guess[i] == answer[i]:
-                ret[i] = 'g'
+                ret[i] = 'GREEN'
+                ans[i] = 'GREEN'
         for j in range(5):
-            if ret[j] != 'g':
+            if ret[j] == 'GRAY':
                 for k in range(5):
-                    if ret[k] == 'b':
+                    if ans[k] == 'GRAY':
                         if guess[j] == answer[k]:
-                            ret[j] = 'y'
+                            ret[j] = 'YELLOW'
+                            ans[k] = 'YELLOW'
         ret = ''.join(map(str, ret))
         if ret in fr_tracker:
             fr_tracker[ret] += 1
@@ -44,6 +48,8 @@ def getEV(guess, ans_list):
         x = value/len(ans_list)
         ev += x*(math.log(1/x,2))
     return ev
+
+
 
 def findBestGuess(aL):
     for g in guessList:
@@ -65,58 +71,58 @@ def findBestGuess(aL):
 
 #Functions
 
-def filter_dictionary(starting_dictionary, guess_colors, grays, yellows):
-    green = []
-    remove =[]
-    for word in range(len(starting_dictionary)): #adding words from master list that have GREENS in right position
-        for i in range(len(guess_colors)):
-            if guess_colors[i] == "GREEN":
-                if guess[i] == starting_dictionary[word][i]:
-                    pass
-                else:
-                    remove.append(starting_dictionary[word])
-                    break
-        if starting_dictionary[word] not in remove and starting_dictionary[word] not in green:
-            green.append(starting_dictionary[word])
+# def filter_dictionary(starting_dictionary, guess_colors, grays, yellows):
+#     green = []
+#     remove =[]
+#     for word in range(len(starting_dictionary)): #adding words from master list that have GREENS in right position
+#         for i in range(len(guess_colors)):
+#             if guess_colors[i] == "GREEN":
+#                 if guess[i] == starting_dictionary[word][i]:
+#                     pass
+#                 else:
+#                     remove.append(starting_dictionary[word])
+#                     break
+#         if starting_dictionary[word] not in remove and starting_dictionary[word] not in green:
+#             green.append(starting_dictionary[word])
 
-    green_yellow = []
-    remove = []
-    for word in range(len(green)): #adding words from GREEN list that have all yellow letters anywhere in the word
-        for letter in range(len(yellows)):
-            if yellows[letter] not in green[word]:
-                remove.append(green[word])
-                break
-            else:
-                pass
-        if green[word] not in remove and green[word] not in green_yellow:
-            green_yellow.append(green[word])
+#     green_yellow = []
+#     remove = []
+#     for word in range(len(green)): #adding words from GREEN list that have all yellow letters anywhere in the word
+#         for letter in range(len(yellows)):
+#             if yellows[letter] not in green[word]:
+#                 remove.append(green[word])
+#                 break
+#             else:
+#                 pass
+#         if green[word] not in remove and green[word] not in green_yellow:
+#             green_yellow.append(green[word])
 
-    no_grays = []
-    remove = []
-    for word in range(len(green_yellow)):  #adding words from GREEN_YELLOW that do not have any gray letters to final filtered list
-        for letter in range(len(grays)):
-            if grays[letter] not in green_yellow[word]:
-                pass
-            else:
-                remove.append(green_yellow[word])
-                break
-        if green_yellow[word] not in remove and green_yellow[word] not in no_grays:
-            no_grays.append(green_yellow[word])
+#     no_grays = []
+#     remove = []
+#     for word in range(len(green_yellow)):  #adding words from GREEN_YELLOW that do not have any gray letters to final filtered list
+#         for letter in range(len(grays)):
+#             if grays[letter] not in green_yellow[word]:
+#                 pass
+#             else:
+#                 remove.append(green_yellow[word])
+#                 break
+#         if green_yellow[word] not in remove and green_yellow[word] not in no_grays:
+#             no_grays.append(green_yellow[word])
 
-    final_filter = []
-    remove = []
-    for word in range(len(no_grays)): #adding words from NO_GRAYS that have YEllOWS in a different position than their previous one
-        for i in range(len(guess_colors)):
-            if guess_colors[i] == "YELLOW":
-                if guess[i] == no_grays[word][i]:
-                    remove.append(no_grays[word])
-                    break
-                else:
-                    pass
-        if no_grays[word] not in remove and no_grays[word] not in final_filter:
-            final_filter.append(no_grays[word])
+#     final_filter = []
+#     remove = []
+#     for word in range(len(no_grays)): #adding words from NO_GRAYS that have YEllOWS in a different position than their previous one
+#         for i in range(len(guess_colors)):
+#             if guess_colors[i] == "YELLOW":
+#                 if guess[i] == no_grays[word][i]:
+#                     remove.append(no_grays[word])
+#                     break
+#                 else:
+#                     pass
+#         if no_grays[word] not in remove and no_grays[word] not in final_filter:
+#             final_filter.append(no_grays[word])
 
-    return final_filter #returns list of possible answers 
+#     return final_filter #returns list of possible answers 
 
 
 
@@ -141,23 +147,46 @@ def filter_dictionary(starting_dictionary, guess_colors, grays, yellows):
 
 def give_colors(g, a, tracking_dict):
     ret = ['GRAY']*5
+    ans = ['GRAY']*5
     for i in range(5):
         if g[i] == a[i]:
             ret[i] = 'GREEN'
+            ans[i] = 'GREEN'
     for j in range(5):
-        if ret[j] != 'GREEN':
+        if ret[j] == 'GRAY':
             for k in range(5):
-                if ret[k] != 'GREEN':
+                if ans[k] == 'GRAY':
                     if g[j] == a[k]:
                         ret[j] = 'YELLOW'
-    
+                        ans[k] = 'YELLOW'    
     for t in range(5):
          tracking_dict[g[t]] = ret[t]
-
     return ret
 
+def filter_words(info, g, aL):
+    new_aL = []
+    for a in aL:
+        ret = ['GRAY']*5
+        ans = ['GRAY']*5
+        for i in range(5):
+            if g[i] == a[i]:
+                ret[i] = 'GREEN'
+                ans[i] = 'GREEN'
+        for j in range(5):
+            if ret[j] == 'GRAY':
+                for k in range(5):
+                    if ans[k] == 'GRAY':
+                        if g[j] == a[k]:
+                            ret[j] = 'YELLOW'
+                            ans[k] = 'YELLOW'
+        if info == ret:
+            new_aL.append(a)
+    return new_aL
+
+
+
 #Main Driving Code
-answer = "raise"
+answer = "slope"
 solved = False
 num_guesses = 0
 letter_dict = {}
@@ -200,12 +229,13 @@ while not solved:
     print(color_scheme)
     print("\n")
 
+
     #find gray and yellow letters
-    for key in letter_dict:
-        if letter_dict[key] == "GRAY":
-            gray_letters.append(key)
-        elif letter_dict[key] == "YELLOW":
-            yellow_letters.append(key)
+    # for key in letter_dict:
+    #     if letter_dict[key] == "GRAY":
+    #         gray_letters.append(key)
+    #     elif letter_dict[key] == "YELLOW":
+    #         yellow_letters.append(key)
 
     #if guess = word
         #you win
@@ -216,7 +246,7 @@ while not solved:
         break
 
     #narrow down answer list
-    filtered_list = filter_dictionary(filtered_list, color_scheme, gray_letters, yellow_letters)
+    filtered_list = filter_words(color_scheme, guess, filtered_list)
     print("There are", len(filtered_list), "remaining possible answers.")
     print(filtered_list)
     print("\n")

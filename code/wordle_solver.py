@@ -3,9 +3,6 @@ import math
 import random
 from collections import Counter
 
-# with open("answerList", "rb") as fp:   # Unpickling
-#     aL = pickle.load(fp)
-
 with open("allowed_words.txt", "r") as f:
     guessList = f.read().splitlines()
 
@@ -43,8 +40,7 @@ def findBestGuess(aL):
         dict[g] = getEV(g, aL)
     c = Counter(dict)
     mostCommon = c.most_common(1)
-    word, value = mostCommon
-    return word, value
+    #word, value = mostCommon
+    return mostCommon
 
-print(getEV('crane', answerList))
 print(findBestGuess(answerList))
