@@ -120,28 +120,44 @@ def filter_dictionary(starting_dictionary, guess_colors, grays, yellows):
 
 
 
-def give_colors(guess_word, answer_word, tracking_dict):        #PROBLEM: when there is a yellow in the second or third spot
-    guess_colors = ["GRAY", "GRAY", "GRAY", "GRAY", "GRAY"]
-    track_colors = [0, 0, 0, 0, 0]
+# def give_colors(guess_word, answer_word, tracking_dict):        #PROBLEM: when there is a yellow in the second or third spot
+#     guess_colors = ["GRAY", "GRAY", "GRAY", "GRAY", "GRAY"]
+#     track_colors = [0, 0, 0, 0, 0]
     
+#     for i in range(5):
+#         if guess_word[i] == answer_word[i]:
+#             guess_colors[i] = "GREEN"
+#             track_colors[i] = 1
+#         elif guess_word[i] in answer_word:  
+#             guess_colors[i] = "YELLOW"
+#             track_colors[i] = 1
+#         else:
+#             pass
+#     for t in range(5):
+#         tracking_dict[guess_word[t]] = guess_colors[t]
+    
+#     return guess_colors
+
+
+def give_colors(g, a, tracking_dict):
+    ret = ['GRAY']*5
     for i in range(5):
-        if guess_word[i] == answer_word[i]:
-            guess_colors[i] = "GREEN"
-            track_colors[i] = 1
-        else:
-            for j in range(5):
-                if i != j and track_colors[j] == 0:          #PROBLEM: Tracking multiple yellow positions for same color
-                    if guess_word[i] == answer_word[j]:   
-                        guess_colors[i] = "YELLOW"
-                        track_colors[i] = 1
+        if g[i] == a[i]:
+            ret[i] = 'GREEN'
+    for j in range(5):
+        if ret[j] != 'GREEN':
+            for k in range(5):
+                if ret[k] != 'GREEN':
+                    if g[j] == a[k]:
+                        ret[j] = 'YELLOW'
     
     for t in range(5):
-        tracking_dict[guess_word[t]] = guess_colors[t]
-    
-    return guess_colors
+         tracking_dict[g[t]] = ret[t]
+
+    return ret
 
 #Main Driving Code
-answer = "hairy"
+answer = "raise"
 solved = False
 num_guesses = 0
 letter_dict = {}
